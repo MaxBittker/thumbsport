@@ -4,14 +4,15 @@ uniform float t;
 uniform vec2 resolution;
 uniform sampler2D texture;
 uniform vec2 mouse;
-uniform vec3 orbs[4];
+uniform vec3 orbs[2];
+uniform float health;
+
 varying vec2 uv;
 
 float PI = 3.14159;
 vec2 doModel(vec3 p);
 
 #pragma glslify: smin = require(glsl-smooth-min)
-
 #pragma glslify: raytrace = require('glsl-raytrace', map = doModel, steps = 90)
 #pragma glslify: normal = require('glsl-sdf-normal', map = doModel)
 #pragma glslify: orenn = require('glsl-diffuse-oren-nayar')
@@ -25,6 +26,7 @@ vec2 doModel(vec3 p);
 #pragma glslify: noise2d = require('glsl-noise/simplex/2d')
 #pragma glslify: noise4d = require('glsl-noise/simplex/4d')
 
+#pragma glslify: squareFrame = require(glsl-square-frame)
 
 // #pragma glslify: noise4d = require(glsl-noise/simplex/4d)
 
@@ -35,7 +37,7 @@ vec2 doModel(vec3 p) {
   float d  = 100.;
   float id = 0.0;
 
-  for(int i=0; i<4;i++){
+  for(int i=0; i<2; i++){
     float b = length(p -orbs[i].xyz)-r;
     if(b<d){
       d =b;
@@ -64,6 +66,8 @@ vec3 lighting(vec3 pos, vec3 nor, vec3 ro, vec3 rd) {
 }
 
 void main() {
+  vec2 st = squareFrame(resolution);
+  
   vec3 color = vec3(0.0);
   vec3 ro, rd;
 
@@ -82,27 +86,39 @@ void main() {
   // }
 
   float d =100.;
-  for(int i=0; i<4;i++){
-    float b = length(uv - orbs[i].xy)-0.1;
-    d = smin(d, b, 0.1);
+  float hue = 0.;
+  for(int i=0; i<2;i++){
+    float b = length(st - orbs[i].xy)-0.1;
+
+    if( d < b){
+      hue = float(i);
+    }
+    d = smin(d, b, 0.5);
   }
+
   if(d*100.>10.){
+    hue = 0.;
     d = 0.;
   }else{
     d = sin((d-t*0.2)*100.);
   }
-  color = vec3(d);
+  color = vec3(hue,d,d);
   
-  float a = noise3d( vec3(uv*10.,t*9.1) ) * PI*2.;
+  float a = noise3d( vec3(st*10.,t*9.1) ) * PI*2.;
   float ps = 2.0;
-  vec4 sample = texture2D(texture, uv + vec2( (cos(a)*ps)/resolution.x, (sin(a)*ps)/resolution.y ));
+  vec4 sample = texture2D(texture, st + vec2( (cos(a)*ps)/resolution.x, (sin(a)*ps)/resolution.y ));
   
-  vec4 back = texture2D(texture, uv+(vec2(0.0, 3./resolution.y)));
+  vec4 back = texture2D(texture, st+(vec2(0.0, 3./resolution.y)));
   // if(!touched){
     // color = sample.rgb;
   // }
-  // if (length(color) >  noise3d(vec3(uv*290.,t))+1.0){color = vec3(1.);}else{color = vec3(0.);}
-
-  gl_FragColor.rgb = color;
+  // if (length(color) >  noise3d(vec3(st*290.,t))+1.0){color = vec3(1.);}else{color = vec3(0.);}
+  if(abs(st.x) < 1. &&abs(st.y) < 1.) {
+  }else{
+    if(st.y<health){
+      color = vec3(1.0,0.,0.);
+    }
+  }
+    gl_FragColor.rgb = color;
   gl_FragColor.a   = 1.0;
 }
