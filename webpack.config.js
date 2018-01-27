@@ -6,7 +6,7 @@ var BUILD_DIR = path.resolve(__dirname, "dist");
 var APP_DIR = __dirname;
 
 var config = {
-  entry: APP_DIR + "/index.js",
+  entry: APP_DIR + "/src/index.js",
   output: {
     path: BUILD_DIR,
     publicPath: "/dist/",
