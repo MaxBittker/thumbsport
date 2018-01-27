@@ -13,6 +13,8 @@ float PI = 3.14159;
 vec2 doModel(vec3 p);
 
 #pragma glslify: smin = require(glsl-smooth-min)
+#pragma glslify: hsv2rgb = require(glsl-hsv2rgb)
+
 #pragma glslify: raytrace = require('glsl-raytrace', map = doModel, steps = 90)
 #pragma glslify: normal = require('glsl-sdf-normal', map = doModel)
 #pragma glslify: orenn = require('glsl-diffuse-oren-nayar')
@@ -86,37 +88,52 @@ void main() {
   // }
 
   float d =100.;
-  float hue = 0.;
+  float wd =100.;
+  
+  float team = 0.;
+  float ad = length(orbs[0]-orbs[1]);
+
   for(int i=0; i<2;i++){
     float b = length(st - orbs[i].xy)-0.1;
-
+    b += noise3d(vec3(st*4.,t))* 0.05;
     if( d < b){
-      hue = float(i);
+      team = float(i);
     }
     d = smin(d, b, 0.5);
   }
+    wd =   
+      (sin(d)*0.5+1.0);
 
-  if(d*100.>10.){
-    hue = 0.;
-    d = 0.;
+  if(d*100.>5.){
+    team = 0.;
+    wd = 0.;
+
+    
+    // vec4 back = texture2D(texture, uv +(vec2(0.0, 0./resolution.y)));
+    // color = sample.rgb*0.9;
+
   }else{
-    d = sin((d-t*0.2)*100.);
   }
-  color = vec3(hue,d,d);
+    // float wd = sin((d-t*0.2)*100.);
+  float hue = (team*0.3) + sin(
+      (d -
+        ( t * 0.5) * (team-0.5))
+      *50.
+      )*0.1;
+  float saturation = (wd*0.5)+1.0; 
+  float value = 0.3 + wd + ((1.5- ad)*0.2);
+  color = hsv2rgb(vec3(hue,saturation,value));
+
+
+  // float a = noise3d( vec3(uv*10.,t*1.1) ) * PI*2.;
+  //   float ps = 2.0;
+  //   vec4 sample = texture2D(texture, uv + vec2( (cos(a)*ps)/resolution.x, (sin(a)*ps)/resolution.y ));
   
-  float a = noise3d( vec3(st*10.,t*9.1) ) * PI*2.;
-  float ps = 2.0;
-  vec4 sample = texture2D(texture, st + vec2( (cos(a)*ps)/resolution.x, (sin(a)*ps)/resolution.y ));
-  
-  vec4 back = texture2D(texture, st+(vec2(0.0, 3./resolution.y)));
-  // if(!touched){
-    // color = sample.rgb;
-  // }
-  // if (length(color) >  noise3d(vec3(st*290.,t))+1.0){color = vec3(1.);}else{color = vec3(0.);}
-  if(abs(st.x) < 1. &&abs(st.y) < 1.) {
+
+  if(abs(st.x) < 0.8 && abs(st.y) < 0.9) {
   }else{
     if(st.y<health){
-      color = vec3(1.0,0.,0.);
+      color = hsv2rgb(vec3(0.0,0.5,0.5));
     }
   }
     gl_FragColor.rgb = color;

@@ -2313,6 +2313,10 @@ glsl-fractal-brownian-noise@^1.0.1:
   dependencies:
     glsl-noise "^0.0.0"
 
+glsl-hsv2rgb@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/glsl-hsv2rgb/-/glsl-hsv2rgb-1.0.0.tgz#a3fed6f3354906a043f417954429da6fc7725b73"
+
 glsl-inject-defines@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/glsl-inject-defines/-/glsl-inject-defines-1.0.3.tgz#dd1aacc2c17fcb2bd3fc32411c6633d0d7b60fd4"

@@ -32,6 +32,7 @@
     "glsl-diffuse-oren-nayar": "^1.0.2",
     "glsl-dither": "^1.0.1",
     "glsl-fractal-brownian-noise": "^1.0.1",
+    "glsl-hsv2rgb": "^1.0.0",
     "glsl-noise": "0.0.0",
     "glsl-raytrace": "^1.0.0",
     "glsl-sdf-normal": "^1.0.0",

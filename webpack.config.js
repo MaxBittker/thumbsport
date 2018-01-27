@@ -1,11 +1,11 @@
-var webpack = require("webpack");
-var path = require("path");
-// var glslify = require('glslify-loader');
+let webpack = require("webpack");
+let path = require("path");
+// let glslify = require('glslify-loader');
 
-var BUILD_DIR = path.resolve(__dirname, "dist");
-var APP_DIR = __dirname;
+let BUILD_DIR = path.resolve(__dirname, "dist");
+let APP_DIR = __dirname;
 
-var config = {
+let config = {
   entry: APP_DIR + "/src/index.js",
   output: {
     path: BUILD_DIR,
