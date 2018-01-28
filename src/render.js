@@ -4,10 +4,9 @@ let fsh = require("./fragment.glsl");
 let vsh = require("./vertex.glsl");
 
 function renderArena(canvas, gameState) {
-    
-    let {width,height} =canvas.getBoundingClientRect();
-    // console.log(width,height)
-    const regl = reglFactory({
+  let { width, height } = canvas.getBoundingClientRect();
+  // console.log(width,height)
+  const regl = reglFactory({
     pixelRatio: 0.7,
     canvas: canvas
   });
@@ -27,18 +26,16 @@ function renderArena(canvas, gameState) {
     return Object.assign({}, ...orbs);
   };
 
-  let uniforms = Object.assign(
-    {
-      resolution: ({framebufferWidth,framebufferHeight,pixelRatio}) => [
-          framebufferWidth,
-          framebufferHeight
-      ],
-      texture: pixels,
-      t: ({ tick }) => 0.01 * tick,
-      health: () => gameState().health
-    },
-    orbStates()
-  );
+  let uniforms = {
+    resolution: ({ framebufferWidth, framebufferHeight, pixelRatio }) => [
+      framebufferWidth,
+      framebufferHeight
+    ],
+    texture: pixels,
+    t: ({ tick }) => 0.01 * tick,
+    health: () => gameState().health,
+    ...orbStates()
+  };
 
   const drawFeedback = regl({
     frag: fsh,
@@ -56,7 +53,7 @@ function renderArena(canvas, gameState) {
       color: [0, 0, 0, 1]
     });
     drawFeedback();
-// console.log(context)
+
     pixels({
       copy: true
     });
