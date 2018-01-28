@@ -6,7 +6,7 @@ let vsh = require("./vertex.glsl");
 function renderArena(canvas, gameState) {
     
     let {width,height} =canvas.getBoundingClientRect();
-    console.log(width,height)
+    // console.log(width,height)
     const regl = reglFactory({
     pixelRatio: 0.7,
     canvas: canvas
@@ -29,12 +29,9 @@ function renderArena(canvas, gameState) {
 
   let uniforms = Object.assign(
     {
-      resolution: context => [
-          context.framebufferWidth,
-          context.framebufferHeight
-          
-        // canvas.getBoundingClientRect().width * context.pixelRatio * 0.6,
-        // canvas.getBoundingClientRect().height * context.pixelRatio * 0.6
+      resolution: ({framebufferWidth,framebufferHeight,pixelRatio}) => [
+          framebufferWidth,
+          framebufferHeight
       ],
       texture: pixels,
       t: ({ tick }) => 0.01 * tick,

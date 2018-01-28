@@ -37,11 +37,12 @@ function updateArena({ stick, dots, AI, health }, input) {
     x: (Math.random() - 0.5) * 2.0,
     y: (Math.random() - 0.5) * 2.0
   };
-
   if (Math.random() < 0.1) {
     AI = add(rand, AI);
   }
+  // console.log(input)
   let movements = [input, AI];
+  // console.log(dots[0],movements[0])
   dots = dots.map((dot, i) => updateDot(dot, movements[i]));
 
   let d = distance(...dots);
