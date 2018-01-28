@@ -47,9 +47,9 @@ function updateArena({ stick, dots, AI, health }, input) {
   let d = distance(...dots);
 
   if (d < 0.4) {
-    health -= d * 0.1;
+    health -= (0.4 - d) * 0.008;
   } else {
-    health += 0.01;
+    health += 0.0001;
   }
 
   health = clamp(health);
@@ -60,8 +60,15 @@ function updateArena({ stick, dots, AI, health }, input) {
   };
 }
 
+function checkWin({ health }, i) {
+  if (health <= -1) {
+    alert(`Player ${i} Wins!`);
+  }
+}
+
 function update([left, right]) {
   arenas = [updateArena(arenas[0], left), updateArena(arenas[1], right)];
+  arenas.map(checkWin);
 }
 
 let getArenaState = i => {

@@ -141,7 +141,10 @@ void main() {
     if (st.x < (health * 0.8) && st.x > -0.8 && st.y < -0.84 && st.y > -0.96 &&
         voronoi3d(vec3(uv * 30., t)).x < 0.7) {
       // float hptx = step(fbm3d(vec3(uv * 30., t), 2), 0.0) * 0.1;
-      color = hsv2rgb(vec3(0.0, 0.7, 0.7));
+      color = hsv2rgb(
+          vec3(0.0,
+               0.7,
+               voronoi3d(vec3(uv * 30., t)).x > 0.7 - pix.x * 30. ? .0 : 0.7));
     }
   }
 
