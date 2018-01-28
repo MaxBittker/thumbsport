@@ -12,25 +12,26 @@ varying vec2 uv;
 float PI = 3.14159;
 vec2 doModel(vec3 p);
 
-#pragma glslify : smin = require(glsl - smooth - min)
-#pragma glslify : hsv2rgb = require(glsl - hsv2rgb)
+// clang-format off
+#pragma glslify: smin = require('glsl-smooth-min')
+#pragma glslify: hsv2rgb = require('glsl-hsv2rgb')
 
-#pragma glslify : raytrace = require('glsl-raytrace', map = doModel, steps = 90)
-#pragma glslify : normal = require('glsl-sdf-normal', map = doModel)
-#pragma glslify : orenn = require('glsl-diffuse-oren-nayar')
-#pragma glslify : gauss = require('glsl-specular-gaussian')
-#pragma glslify : camera = require('glsl-turntable-camera')
+#pragma glslify: raytrace = require('glsl-raytrace', map = doModel, steps = 90)
+#pragma glslify: normal = require('glsl-sdf-normal', map = doModel)
+#pragma glslify: orenn = require('glsl-diffuse-oren-nayar')
+#pragma glslify: gauss = require('glsl-specular-gaussian')
+#pragma glslify: camera = require('glsl-turntable-camera')
 
-#pragma glslify : fbm4d = require('glsl-fractal-brownian-noise/4d')
-#pragma glslify : fbm3d = require('glsl-fractal-brownian-noise/3d')
+#pragma glslify: fbm4d = require('glsl-fractal-brownian-noise/4d')
+#pragma glslify: fbm3d = require('glsl-fractal-brownian-noise/3d')
 
-#pragma glslify : noise3d = require('glsl-noise/simplex/3d')
-#pragma glslify : noise2d = require('glsl-noise/simplex/2d')
-#pragma glslify : noise4d = require('glsl-noise/simplex/4d')
+#pragma glslify: noise3d = require('glsl-noise/simplex/3d')
+#pragma glslify: noise2d = require('glsl-noise/simplex/2d')
+#pragma glslify: noise4d = require('glsl-noise/simplex/4d')
 
-#pragma glslify : squareFrame = require(glsl - square - frame)
-
+#pragma glslify: squareFrame = require('glsl-square-frame')
 // #pragma glslify: noise4d = require(glsl-noise/simplex/4d)
+// clang-format on
 
 vec2 doModel(vec3 p) {
   float r = 0.5;
