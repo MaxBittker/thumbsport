@@ -86,7 +86,7 @@ vec2 rotateTilePattern(vec2 _st) {
 
 void main() {
   vec2 st = squareFrame(resolution);
-
+  vec2 pix = 1. / resolution;
   vec3 color = vec3(0.0);
 
   float d = 100.;
@@ -100,10 +100,8 @@ void main() {
     float fi = float(i);
     // b += 0.2 * (fi - 0.3) * -1.;
     // b += voronoi3d(vec3(st * 15., t)).x * 0.2 * (fi - 0.5);
-    if (d > b) {
-      team = fi;
-      teamOrg = orbs[i].xy - st;
-    }
+    team = (d > b) ? fi : team;
+    teamOrg = (d > b) ? orbs[i].xy - st : teamOrg;
     d = smin(d, b, 0.5);
   }
   wd = (sin(d) * 0.5 + 1.0);
@@ -122,21 +120,28 @@ void main() {
     vec2 rd = vec2(atan(teamOrg.y, teamOrg.x), length(teamOrg) * 10.);
     rd = tile(rd, 0.5);
     rd = rotateTilePattern(rd);
-    color = vec3(step(rd.x, rd.y));
+    float tp = step(rd.x, rd.y);
+    color = hsv2rgb(vec3(hue, saturation, tp));
   }
 
-  float a = noise3d(vec3(uv * 10., t * 1.1)) * PI * 2.;
-  float ps = 2.0;
-  vec4 sample = texture2D(
-      texture,
-      uv + vec2((cos(a) * ps) / resolution.x, (sin(a) * ps) / resolution.y));
+  // float a = noise3d(vec3(uv * 10., t * 1.1)) * PI * 2.;
+  // float ps = 2.0;
+  // vec4 sample = texture2D(
+  // texture,
+  // uv + vec2((cos(a) * ps) / resolution.x, (sin(a) * ps) / resolution.y));
 
   if (abs(st.x) < 0.8 && abs(st.y) < 0.8) {
   } else {
-    color = vec3(0.8, 0.8, 0.9);
-    if (st.x < (health * 0.8) && st.x > -0.8 && st.y < -0.84 && st.y > -0.96) {
-      float hptx = step(fbm3d(vec3(uv * 30., t), 2), 0.0) * 0.1;
-      color = hsv2rgb(vec3(0.0, 0.7 + hptx, 0.7));
+    // color = vec3(0.8, 0.8, 0.9);
+
+    if (abs(st.x) < 0.8 + pix.x * 2.5 && abs(st.y) < 0.8 + pix.y * 2.5) {
+      color = vec3(0.);
+    }
+
+    if (st.x < (health * 0.8) && st.x > -0.8 && st.y < -0.84 && st.y > -0.96 &&
+        voronoi3d(vec3(uv * 30., t)).x < 0.7) {
+      // float hptx = step(fbm3d(vec3(uv * 30., t), 2), 0.0) * 0.1;
+      color = hsv2rgb(vec3(0.0, 0.7, 0.7));
     }
   }
 
