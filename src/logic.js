@@ -5,7 +5,7 @@ let friction = v => (Math.abs(v) < 0.3 ? 0 : v);
 let distance = ({ x, y }, { x: bx, y: by }) =>
   Math.sqrt(Math.pow(x - bx, 2) + Math.pow(y - by, 2));
 
-let speed = 5 / 100;
+let speed = 3 / 100;
 
 let add = ({ x, y }, { x: bx, y: by }) => {
   return {
@@ -16,8 +16,8 @@ let add = ({ x, y }, { x: bx, y: by }) => {
 
 function updateDot({ x, y }, { x: dx, y: dy }) {
   return {
-    x: clamp(x + friction(dx) * speed, 0.8),
-    y: clamp(y + friction(dy) * -speed, 0.8)
+    x: clamp(x + friction(dx) * speed, 0.7),
+    y: clamp(y + friction(dy) * -speed, 0.7)
   };
 }
 
@@ -40,9 +40,8 @@ function updateArena({ stick, dots, AI, health }, input) {
   if (Math.random() < 0.1) {
     AI = add(rand, AI);
   }
-  // console.log(input)
   let movements = [input, AI];
-  // console.log(dots[0],movements[0])
+
   dots = dots.map((dot, i) => updateDot(dot, movements[i]));
 
   let d = distance(...dots);
