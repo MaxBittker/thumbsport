@@ -1,6 +1,6 @@
 let webpack = require("webpack");
 let path = require("path");
-// let glslify = require('glslify-loader');
+const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 
 let BUILD_DIR = path.resolve(__dirname, "dist");
 let APP_DIR = __dirname;
@@ -13,9 +13,10 @@ let config = {
     filename: "bundle.js"
   },
   devtool: "#cheap-source-map",
-  devServer:{
-    overlay: true,
+  devServer: {
+    overlay: true
   },
+  plugins: [new UglifyJSPlugin({ uglifyOptions: {} })],
   module: {
     loaders: [
       {
