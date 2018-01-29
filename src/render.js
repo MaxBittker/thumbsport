@@ -1,13 +1,13 @@
-const _ = require("lodash");
-const reglFactory = require("regl");
-let fsh = require("./fragment.glsl");
-let vsh = require("./vertex.glsl");
+import _ from "lodash";
+import reglFactory from "regl";
+import fsh from "./fragment.glsl";
+import vsh from "./vertex.glsl";
 
 function renderArena(canvas, gameState) {
   let { width, height } = canvas.getBoundingClientRect();
-  // console.log(width,height)
+
   const regl = reglFactory({
-    pixelRatio: 0.7,
+    pixelRatio: 2.0,
     canvas: canvas
   });
 
@@ -59,4 +59,5 @@ function renderArena(canvas, gameState) {
     });
   });
 }
-module.exports = { renderArena };
+
+export { renderArena };
