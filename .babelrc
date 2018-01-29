@@ -1,4 +1,4 @@
 {
-    "presets": ["stage-2"],
-    "plugins": ["glslify"]
+  "presets": ["stage-2"],
+  "plugins": ["glslify"]
 }
