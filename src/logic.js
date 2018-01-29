@@ -124,7 +124,7 @@ function updateArena({ dots, AI, health }, input, side) {
 
 function checkWin({ health }, i) {
   if (health <= -1) {
-    alert(`Player ${i} Wins!`);
+    // alert(`Player ${i} Wins!`);
     arenas = [makeArena(), makeArena()];
   }
 }

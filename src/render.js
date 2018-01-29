@@ -3,11 +3,11 @@ import reglFactory from "regl";
 import fsh from "./fragment.glsl";
 import vsh from "./vertex.glsl";
 
-function renderArena(canvas, gameState) {
+function renderArena(canvas, gameState, side) {
   let { width, height } = canvas.getBoundingClientRect();
 
   const regl = reglFactory({
-    pixelRatio: 2.0,
+    pixelRatio: 1.0,
     canvas: canvas
   });
 
@@ -32,6 +32,7 @@ function renderArena(canvas, gameState) {
       framebufferHeight
     ],
     texture: pixels,
+    side,
     t: ({ tick }) => 0.01 * tick,
     health: () => gameState().health,
     ...orbStates()

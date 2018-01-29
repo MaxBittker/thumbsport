@@ -5,6 +5,8 @@ uniform vec2 resolution;
 uniform sampler2D texture;
 uniform vec2 mouse;
 uniform vec3 orbs[2];
+uniform bool side;
+
 uniform float health;
 
 varying vec2 uv;
@@ -34,56 +36,7 @@ float PI = 3.14159;
 #pragma glslify: squareFrame = require('glsl-square-frame')
 // #pragma glslify: noise4d = require(glsl-noise/simplex/4d)
 // clang-format on
-
-vec2 rotate2D(vec2 _st, float _angle) {
-  _st -= 0.5;
-  _st = mat2(cos(_angle), -sin(_angle), sin(_angle), cos(_angle)) * _st;
-  _st += 0.5;
-  return _st;
-}
-
-vec2 tile(vec2 _st, float _zoom) {
-  _st *= _zoom;
-  return fract(_st);
-}
-
-vec2 rotateTilePattern(vec2 _st) {
-
-  //  Scale the coordinate system by 2x2
-  _st *= 2.0;
-
-  //  Give each cell an index number
-  //  according to its position
-  float index = 0.0;
-  index += step(1., mod(_st.x, 2.0));
-  index += step(1., mod(_st.y, 2.0)) * 2.0;
-
-  //      |
-  //  2   |   3
-  //      |
-  //--------------
-  //      |
-  //  0   |   1
-  //      |
-
-  // Make each cell between 0.0 - 1.0
-  _st = fract(_st);
-
-  // Rotate each cell according to the index
-  if (index == 1.0) {
-    //  Rotate cell 1 by 90 degrees
-    _st = rotate2D(_st, PI * 0.5);
-  } else if (index == 2.0) {
-    //  Rotate cell 2 by -90 degrees
-    _st = rotate2D(_st, PI * -0.5);
-  } else if (index == 3.0) {
-    //  Rotate cell 3 by 180 degrees
-    _st = rotate2D(_st, PI);
-  }
-
-  return _st;
-}
-
+// vec2 rd = vec2(atan(teamOrg.y, teamOrg.x), length(teamOrg) * 20.);
 void main() {
   vec2 st = squareFrame(resolution);
   vec2 pix = 1. / resolution;
@@ -92,57 +45,41 @@ void main() {
   float d = 100.;
   float wd = 100.;
 
-  float team = 0.;
+  int player = 0;
   float ad = length(orbs[0] - orbs[1]);
   vec2 teamOrg = orbs[0].xy - st;
   for (int i = 0; i < 2; i++) {
     float b = length(st - orbs[i].xy) - 0.1;
     float fi = float(i);
     // b += 0.2 * (fi - 0.3) * -1.;
-    // b += voronoi3d(vec3(st * 15., t)).x * 0.2 * (fi - 0.5);
-    team = (d > b) ? fi : team;
+    b += (voronoi3d(vec3(st * 10., t)).x - 0.5) * 0.1 * (0.5 - fi) *
+         (side ? -1. : 1.);
+    player = (d > b) ? i : player;
     teamOrg = (d > b) ? orbs[i].xy - st : teamOrg;
+    vec2 rd = vec2(atan(teamOrg.y, teamOrg.x), length(teamOrg) * 20.);
+
     d = smin(d, b, 0.5);
   }
-  wd = (sin(d) * 0.5 + 1.0);
+  float thrsh = 1. / 200.;
+  vec3 bg = hsv2rgb(vec3(0.1, 0.1, 0.9));
 
-  if (d * 100. > 5.) {
-    team = 0.;
-    wd = 0.;
-    color = hsv2rgb(vec3(0.1, 0.1, 0.9));
+  float hue = (player == 1) ? 0.03 : .6;
+  float saturation = 0.7; // + sin((d - (t * 0.5)) * 50.) * 0.3;
+  float value = d < (thrsh - (pix.x * 2.)) ? 0.7 : 0.;
 
-  } else {
-    float hue = (team * 0.3);
-    float saturation = 0.7 + sin((d - (t * 0.5) * (team - 0.5)) * 50.) * 0.3;
-    float value = 0.5;
-    color = hsv2rgb(vec3(hue, saturation, value));
-
-    vec2 rd = vec2(atan(teamOrg.y, teamOrg.x), length(teamOrg) * 10.);
-    rd = tile(rd, 0.5);
-    rd = rotateTilePattern(rd);
-    float tp = step(rd.x, rd.y);
-    color = hsv2rgb(vec3(hue, saturation, tp));
-  }
-
-  // float a = noise3d(vec3(uv * 10., t * 1.1)) * PI * 2.;
-  // float ps = 2.0;
-  // vec4 sample = texture2D(
-  // texture,
-  // uv + vec2((cos(a) * ps) / resolution.x, (sin(a) * ps) / resolution.y));
+  color = (d > thrsh) ? bg : hsv2rgb(vec3(hue, saturation, value));
 
   if (abs(st.x) < 0.8 && abs(st.y) < 0.8) {
   } else {
-    // color = vec3(0.8, 0.8, 0.9);
 
     if (abs(st.x) < 0.8 + pix.x * 2.5 && abs(st.y) < 0.8 + pix.y * 2.5) {
-      color = vec3(0.);
+      color = hsv2rgb(vec3(0.1, 0.1, 0.1));
     }
 
     if (st.x < (health * 0.8) && st.x > -0.8 && st.y < -0.84 && st.y > -0.96 &&
         voronoi3d(vec3(uv * 30., t)).x < 0.7) {
-      // float hptx = step(fbm3d(vec3(uv * 30., t), 2), 0.0) * 0.1;
       color = hsv2rgb(
-          vec3(0.0,
+          vec3(side ? 0.03 : 0.6,
                0.7,
                voronoi3d(vec3(uv * 30., t)).x > 0.7 - pix.x * 30. ? .0 : 0.7));
     }
@@ -151,3 +88,10 @@ void main() {
   gl_FragColor.rgb = color;
   gl_FragColor.a = 1.0;
 }
+// float a = noise3d(vec3(uv * 100., t * 1.1)) * PI * 2.;
+// float ps = 2.0;
+// vec4 sample = texture2D(
+//     texture,
+//     uv + vec2((cos(a) * ps) / resolution.x, (sin(a) * ps) /
+//     resolution.y));
+// color = sample.rgb * 0.9;
