@@ -11,8 +11,6 @@ function renderArena(canvas, gameState, side) {
     canvas: canvas
   });
 
-  const pixels = regl.texture();
-
   const orbStates = () => {
     let orbs = _.range(2).map(i => {
       return {
@@ -31,10 +29,11 @@ function renderArena(canvas, gameState, side) {
       framebufferWidth,
       framebufferHeight
     ],
-    texture: pixels,
     side,
     t: ({ tick }) => 0.01 * tick,
     health: () => gameState().health,
+    fightDistance: () => gameState().d,
+
     ...orbStates()
   };
 
@@ -54,10 +53,6 @@ function renderArena(canvas, gameState, side) {
       color: [0, 0, 0, 1]
     });
     drawFeedback();
-
-    pixels({
-      copy: true
-    });
   });
 }
 

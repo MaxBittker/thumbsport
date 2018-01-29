@@ -65,7 +65,8 @@ let makeArena = () => {
   return {
     dots: [{ x: 0, y: 0 }, { x: 0, y: 0 }],
     AI: { x: 0, y: 0 },
-    health: 1
+    health: 1,
+    d: 0
   };
 };
 let arenas = [makeArena(), makeArena()];
@@ -98,12 +99,9 @@ let runAI = ({ dots, AI }, side) => {
   return newAI;
 };
 function updateArena({ dots, AI, health }, input, side) {
-  let nAI = runAI({ dots, AI }, side);
+  let newAI = runAI({ dots, AI }, side);
 
-  let movements = [input, nAI];
-  // if (mAI.x == undefined) {
-  // debugger;
-  // }
+  let movements = [input, newAI];
   dots = dots.map((dot, i) => updateDot(dot, movements[i]));
 
   let d = distance(...dots);
@@ -117,14 +115,15 @@ function updateArena({ dots, AI, health }, input, side) {
   health = clamp(health);
   return {
     dots,
-    AI: nAI,
-    health
+    AI: newAI,
+    health,
+    d
   };
 }
 
 function checkWin({ health }, i) {
   if (health <= -1) {
-    // alert(`Player ${i} Wins!`);
+    console.log(`Player ${i} Wins!`);
     arenas = [makeArena(), makeArena()];
   }
 }
