@@ -1,4 +1,6 @@
 import _ from "lodash";
+import Tone from "tone";
+
 import { setupOverlay } from "regl-shader-error-overlay";
 setupOverlay();
 
@@ -24,3 +26,9 @@ function resize(canvas) {
   canvas.width = 1.0 * w;
   canvas.height = 1.0 * h;
 }
+
+//create a synth and connect it to the master output (your speakers)
+var synth = new Tone.Synth().toMaster();
+window.synth = synth;
+//play a middle 'C' for the duration of an 8th note
+synth.triggerAttack("C4");

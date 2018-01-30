@@ -95,7 +95,7 @@ let runAI = ({ dots, AI }, side) => {
     }
     let fsum = norm(forces.reduce(add));
     newAI = add(newAI, fsum);
-    newAI = clampVec(newAI, 0.6);
+    newAI = clampVec(newAI, 1.0);
     // newAI.y *= -1;
   }
   return newAI;
@@ -110,6 +110,7 @@ function updateArena({ dots, AI, health }, input, side) {
 
   if (d < 0.4) {
     health -= (0.4 - d) * 0.008;
+    window.synth.oscillator.frequency.value = d * 200;
   } else {
     health += 0.0005;
   }
