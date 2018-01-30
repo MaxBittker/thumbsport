@@ -4,12 +4,14 @@ body {
 .screens {
   display: flex;
   height: 100%;
+  width: 100%;
 }
 
 canvas {
   width: 50%;
   height: 100%;
 }
+
 div {
   position: absolute;
 }
