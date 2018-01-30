@@ -95,7 +95,7 @@ let runAI = ({ dots, AI }, side) => {
     }
     let fsum = norm(forces.reduce(add));
     newAI = add(newAI, fsum);
-    newAI = clampVec(newAI, 0.6);
+    newAI = clampVec(newAI, 0.8);
     // newAI.y *= -1;
   }
   return newAI;
