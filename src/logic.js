@@ -63,15 +63,15 @@ function updateDot({ x, y }, { x: dx, y: dy }) {
   };
 }
 
-let makeArena = () => {
+let makeArena = (i) => {
   return {
-    dots: [{ x: 0, y: 0 }, { x: 0, y: 0 }],
+    dots: [{ x: 0, y: 0.5*i }, { x: 0, y: -0.5*i }],
     AI: { x: 0, y: 0 },
     health: 1,
     d: 0
   };
 };
-let arenas = [makeArena(), makeArena()];
+let arenas = [makeArena(1), makeArena(-1)];
 
 let set = v => Object.assign(state, v);
 let wallpoint = {};
@@ -113,12 +113,14 @@ function updateArena({ dots, AI, health }, movements, side) {
 
   if (d < 0.4) {
     health -= (0.4 - d) * 0.008;
-    window.synths[side].oscillator.frequency.value = (0.4 - d) * 400;
+    // window.synths[side].oscillator.frequency.value = (0.4 - d) * 400;
+    // window.synths[side].volume.value = 0.4 - d;
+    window.synths[side].set("detune", d * -1000);
+    window.synths[side].set("frequency", (0.4 - d) * 240);
   } else {
     health += 0.0005;
-    window.synths[side].oscillator.frequency.value = 0;
-
-    // window.synths[side].oscillator.frequency.value = d * 200;
+    // window.synths[side].oscillator.frequency.value = 0;
+    window.synths[side].set("frequency", 0);
   }
 
   health = clamp(health);
