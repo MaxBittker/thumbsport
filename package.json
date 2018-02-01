@@ -50,6 +50,7 @@
     "regl-camera": "^2.1.1",
     "regl-recorder": "^0.2.0",
     "regl-shader-error-overlay": "^1.0.0",
+    "tone": "^0.11.11",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"

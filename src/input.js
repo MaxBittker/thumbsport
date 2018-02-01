@@ -3,14 +3,7 @@ const { update } = require("./logic");
 
 let frame;
 
-function tick() {
-  let gamepad = gamepads[0];
-
-  if (!gamepad) {
-    return;
-  }
-  // debugger;
-  // console.log(gamepad);
+function parseGamepad(gamepad) {
   let left = {
     x: gamepad.axis("left stick x"),
     y: gamepad.axis("left stick y")
@@ -21,8 +14,20 @@ function tick() {
     y: gamepad.axis("right stick y")
   };
 
+  return [left, right];
+}
+function tick() {
+  let gamepad = gamepads[0];
+
+  if (!gamepad) {
+    return;
+  }
+  // debugger;
+  // console.log(gamepad);
+
   navigator.getGamepads();
-  update([left, right]);
+  let inputs = gamepads.map(parseGamepad);
+  update(inputs);
 
   if (gamepad.button("b")) {
     console.log("a");
@@ -30,7 +35,6 @@ function tick() {
     gamepads[0].mapping.axes["right stick y"] = { index: 4 };
     // gamepad;
   }
-  navigator.getGamepads();
   window.requestAnimationFrame(tick);
 }
 

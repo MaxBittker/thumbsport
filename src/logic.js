@@ -75,7 +75,8 @@ let arenas = [makeArena(), makeArena()];
 
 let set = v => Object.assign(state, v);
 let wallpoint = {};
-let runAI = ({ dots, AI }, side) => {
+
+let runAI = ({ dots, AI, health, d }, side) => {
   let newAI = AI;
   let rand = {
     x: (Math.random() - 0.5) * 2.0,
@@ -98,26 +99,33 @@ let runAI = ({ dots, AI }, side) => {
     newAI = clampVec(newAI, 1.0);
     // newAI.y *= -1;
   }
-  return newAI;
+  return {
+    AI: newAI,
+    dots,
+    health,
+    d
+  };
 };
-function updateArena({ dots, AI, health }, input, side) {
-  let newAI = runAI({ dots, AI }, side);
-
-  let movements = [input, newAI];
+function updateArena({ dots, AI, health }, movements, side) {
   dots = dots.map((dot, i) => updateDot(dot, movements[i]));
 
   let d = distance(...dots);
 
   if (d < 0.4) {
     health -= (0.4 - d) * 0.008;
+    window.synths[side].oscillator.frequency.value = (0.4 - d) * 400;
   } else {
     health += 0.0005;
+    window.synths[side].oscillator.frequency.value = 0;
+
+    // window.synths[side].oscillator.frequency.value = d * 200;
   }
 
   health = clamp(health);
+
   return {
     dots,
-    AI: newAI,
+    AI,
     health,
     d
   };
@@ -130,8 +138,17 @@ function checkWin({ health }, i) {
   }
 }
 
-function update([left, right]) {
-  arenas = [updateArena(arenas[0], left, 0), updateArena(arenas[1], right, 1)];
+function update(inputs) {
+  if (inputs.length === 1) {
+    arenas = arenas.map((arena, i) => runAI(arena, i));
+    arenas = arenas.map((arena, i) =>
+      updateArena(arena, [inputs[0][i], arena.AI])
+    );
+  } else {
+    arenas = arenas.map((arena, i) =>
+      updateArena(arena, [inputs[0][i], inputs[1][i]], i)
+    );
+  }
   arenas.map(checkWin);
 }
 
