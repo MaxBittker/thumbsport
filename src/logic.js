@@ -106,16 +106,19 @@ let runAI = ({ dots, AI, health, d }, side) => {
     d
   };
 };
-function updateArena({ dots, AI, health }, movements) {
+function updateArena({ dots, AI, health }, movements, side) {
   dots = dots.map((dot, i) => updateDot(dot, movements[i]));
 
   let d = distance(...dots);
 
   if (d < 0.4) {
     health -= (0.4 - d) * 0.008;
-    window.synth.oscillator.frequency.value = d * 200;
+    window.synths[side].oscillator.frequency.value = (0.4 - d) * 400;
   } else {
     health += 0.0005;
+    window.synths[side].oscillator.frequency.value = 0;
+
+    // window.synths[side].oscillator.frequency.value = d * 200;
   }
 
   health = clamp(health);
@@ -143,7 +146,7 @@ function update(inputs) {
     );
   } else {
     arenas = arenas.map((arena, i) =>
-      updateArena(arena, [inputs[0][i], inputs[1][i]])
+      updateArena(arena, [inputs[0][i], inputs[1][i]], i)
     );
   }
   arenas.map(checkWin);
