@@ -11,6 +11,7 @@ import { sound } from "./sound";
 
 sound();
 input();
+window.pixelRatio = 0.8;
 
 let canvases = [document.getElementById("l"), document.getElementById("r")];
 
@@ -25,8 +26,8 @@ function resize(canvas) {
   var w = bounds.width;
   var h = bounds.height;
 
-  canvas.width = 1.0 * w;
-  canvas.height = 1.0 * h;
+  canvas.width = window.pixelRatio * w;
+  canvas.height = window.pixelRatio * h;
 }
 
 cs.prevent();
