@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { bloop } from "./sound";
 
 import { showScore, showCountDown, showWinner } from "./display";

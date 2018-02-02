@@ -1,4 +1,3 @@
-import _ from "lodash";
 import cs from "computer-sleep";
 import { setupOverlay } from "regl-shader-error-overlay";
 setupOverlay();

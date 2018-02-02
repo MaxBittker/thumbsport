@@ -1,4 +1,3 @@
-import _ from "lodash";
 import reglFactory from "regl";
 import fsh from "./fragment.glsl";
 import vsh from "./vertex.glsl";
@@ -12,7 +11,7 @@ function renderArena(canvas, gameState, side) {
   });
 
   const orbStates = () => {
-    let orbs = _.range(2).map(i => {
+    let orbs = [0, 1].map(i => {
       return {
         [`orbs[${i}]`]: ({ pixelRatio, viewportWidth, viewportHeight }) => [
           gameState().dots[i].x,
