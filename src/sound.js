@@ -10,7 +10,7 @@ function sound() {
   );
 
   window.synths.map(s => {
-    s.set("volume", 25);
+    s.set("volume", 50);
     s.triggerAttack("C4");
     s.set("frequency", 0);
   });

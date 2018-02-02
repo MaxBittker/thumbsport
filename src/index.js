@@ -1,4 +1,3 @@
-import _ from "lodash";
 import cs from "computer-sleep";
 import { setupOverlay } from "regl-shader-error-overlay";
 setupOverlay();
@@ -11,7 +10,7 @@ import { sound } from "./sound";
 
 sound();
 input();
-window.pixelRatio = 0.8;
+window.pixelRatio = 0.6;
 
 let canvases = [document.getElementById("l"), document.getElementById("r")];
 
