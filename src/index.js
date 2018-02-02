@@ -11,7 +11,7 @@ import { sound } from "./sound";
 
 sound();
 input();
-window.pixelRatio = 0.8;
+window.pixelRatio = 0.6;
 
 let canvases = [document.getElementById("l"), document.getElementById("r")];
 
