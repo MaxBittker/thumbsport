@@ -1,5 +1,5 @@
 let gamepads = require("html5-gamepad");
-const { update } = require("./logic");
+const { update, go } = require("./logic");
 
 let frame;
 
@@ -13,6 +13,10 @@ function parseGamepad(gamepad) {
     x: gamepad.axis("right stick x"),
     y: gamepad.axis("right stick y")
   };
+
+  if (gamepad.button("a")) {
+    go();
+  }
 
   return [left, right];
 }
@@ -29,13 +33,13 @@ function tick() {
   let inputs = gamepads.map(parseGamepad);
   update(inputs);
 
-  if (gamepad.button("b")) {
-    console.log("a");
-    gamepads[0].mapping.axes["right stick x"] = { index: 3 };
-    gamepads[0].mapping.axes["right stick y"] = { index: 4 };
-    // gamepad;
-  }
-  window.requestAnimationFrame(tick);
+  // if (gamepad.button("b")) {
+  //   console.log("a");
+  //   gamepads[0].mapping.axes["right stick x"] = { index: 3 };
+  //   gamepads[0].mapping.axes["right stick y"] = { index: 4 };
+  //   // gamepad;
+  // }
+  frame = window.requestAnimationFrame(tick);
 }
 
 function loop() {
@@ -56,4 +60,3 @@ let start = () => {
 // window.addEventListener("load", () => start(), false);
 
 module.exports = start;
-// Gamepad connected at index 0: 45e-28e-Xbox 360 Wired Controller. 15 buttons, 6 axes.

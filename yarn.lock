@@ -1289,6 +1289,10 @@ compression@^1.5.2:
     safe-buffer "5.1.1"
     vary "~1.1.2"
 
+computer-sleep@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/computer-sleep/-/computer-sleep-0.0.1.tgz#5974e668c38c5a6ef3d0674118a25d256439a076"
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"

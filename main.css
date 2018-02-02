@@ -1,10 +1,12 @@
 body {
+  font-family: "Lato", sans-serif;
   margin: 0px;
 }
 .screens {
   display: flex;
   height: 100%;
   width: 100%;
+  position: absolute;
 }
 
 canvas {
@@ -12,6 +14,39 @@ canvas {
   height: 100%;
 }
 
-div {
+.display {
   position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 500;
+  display: flex;
+  /* flex-direction: column; */
+}
+#score {
+  position: absolute;
+  top: 5px;
+  font-size: 40px;
+
+  width: 100%;
+  text-align: center;
+  margin: auto;
+}
+#lScore {
+  color: #396aae;
+}
+#rScore {
+  color: #af4d3a;
+}
+.Red {
+  color: #af4d3a;
+}
+.Blue {
+  color: #396aae;
+}
+#countdown {
+  margin: auto;
+  text-align: center;
+  font-size: 150px;
 }

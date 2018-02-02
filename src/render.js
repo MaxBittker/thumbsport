@@ -7,7 +7,7 @@ function renderArena(canvas, gameState, side) {
   let { width, height } = canvas.getBoundingClientRect();
 
   const regl = reglFactory({
-    pixelRatio: 1.0,
+    pixelRatio: window.pixelRatio,
     canvas: canvas
   });
 

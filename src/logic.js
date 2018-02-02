@@ -1,7 +1,12 @@
 import _ from "lodash";
-import { normalize, dirname } from "path";
+import { bloop } from "./sound";
+
+import { showScore, showCountDown, showWinner } from "./display";
 
 let bound = 0.7;
+let score = [0, 0];
+//start, play, count
+let mode = "stop";
 
 let pack = ({ x, y }, f) => {
   return {
@@ -9,6 +14,7 @@ let pack = ({ x, y }, f) => {
     y: f(y)
   };
 };
+
 let getClosestWall = p => {
   let { x, y } = p;
   let wallpoints = [
@@ -63,15 +69,19 @@ function updateDot({ x, y }, { x: dx, y: dy }) {
   };
 }
 
-let makeArena = () => {
+let makeArena = i => {
   return {
-    dots: [{ x: 0, y: 0 }, { x: 0, y: 0 }],
+    dots: [{ x: 0, y: 0.5 * i }, { x: 0, y: -0.5 * i }],
     AI: { x: 0, y: 0 },
     health: 1,
-    d: 0
+    d: 0.0001
   };
 };
-let arenas = [makeArena(), makeArena()];
+let arenas = [makeArena(1), makeArena(-1)];
+
+let resetArenas = () => {
+  arenas = [makeArena(1), makeArena(-1)];
+};
 
 let set = v => Object.assign(state, v);
 let wallpoint = {};
@@ -112,13 +122,15 @@ function updateArena({ dots, AI, health }, movements, side) {
   let d = distance(...dots);
 
   if (d < 0.4) {
-    health -= (0.4 - d) * 0.008;
-    window.synths[side].oscillator.frequency.value = (0.4 - d) * 400;
+    health -= (0.4 - d) * 0.04;
+    // window.synths[side].oscillator.frequency.value = (0.4 - d) * 400;
+    // window.synths[side].volume.value = 0.4 - d;
+    window.synths[side].set("detune", d * -1000);
+    window.synths[side].set("frequency", (0.4 - d) * 240);
   } else {
     health += 0.0005;
-    window.synths[side].oscillator.frequency.value = 0;
-
-    // window.synths[side].oscillator.frequency.value = d * 200;
+    // window.synths[side].oscillator.frequency.value = 0;
+    window.synths[side].set("frequency", 0);
   }
 
   health = clamp(health);
@@ -133,12 +145,21 @@ function updateArena({ dots, AI, health }, movements, side) {
 
 function checkWin({ health }, i) {
   if (health <= -1) {
-    console.log(`Player ${i} Wins!`);
-    arenas = [makeArena(), makeArena()];
+    mode = "stop";
+    // alert(`Player ${i} Wins!`);
+    score[i]++;
+    showScore(score);
+    showWinner(i);
+    window.synths[0].set("frequency", 0);
+    window.synths[1].set("frequency", 0);
   }
 }
 
 function update(inputs) {
+  if (mode !== "play") {
+    return;
+  }
+
   if (inputs.length === 1) {
     arenas = arenas.map((arena, i) => runAI(arena, i));
     arenas = arenas.map((arena, i) =>
@@ -155,4 +176,16 @@ function update(inputs) {
 let getArenaState = i => {
   return arenas[i];
 };
-export { getArenaState, update };
+
+let go = () => {
+  if (mode !== "stop") {
+    bloop(Math.random() * 2);
+    return;
+  }
+  mode = "count";
+  resetArenas();
+  showCountDown(3, () => {
+    mode = "play";
+  });
+};
+export { getArenaState, update, go };
