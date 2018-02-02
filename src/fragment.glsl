@@ -49,16 +49,17 @@ void main() {
   float ad = length(orbs[0] - orbs[1]);
   vec2 teamOrg = orbs[0].xy - st;
   for (int i = 0; i < 2; i++) {
-    float b = length(st - orbs[i].xy) - 0.1;
+    bool attacker = (i == 0 && side) || (!side && i == 1);
+    float b = length(st - orbs[i].xy) - (attacker ? 0.1 : 0.09);
     float fi = float(i);
-    b += (voronoi3d(vec3(st * 10., t)).x - 0.5) * 0.1 * (0.5 - fi) *
-         (side ? -1. : 1.);
+    b +=
+        (voronoi3d(vec3(st * 10., t)).x - 0.5) * 0.08 * (attacker ? -1.0 : 1.0);
     player = (d > b) ? i : player;
 
     teamOrg = (d > b) ? orbs[i].xy - st : teamOrg;
     vec2 rd = vec2(atan(teamOrg.y, teamOrg.x), length(teamOrg) * 20.);
 
-    d = smin(d, b, 0.2);
+    d = smin(d, b, 0.4);
   }
 
   bool clash =

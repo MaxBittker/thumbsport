@@ -1,5 +1,5 @@
 import _ from "lodash";
-
+import cs from "computer-sleep";
 import { setupOverlay } from "regl-shader-error-overlay";
 setupOverlay();
 
@@ -28,3 +28,5 @@ function resize(canvas) {
   canvas.width = 1.0 * w;
   canvas.height = 1.0 * h;
 }
+
+cs.prevent();

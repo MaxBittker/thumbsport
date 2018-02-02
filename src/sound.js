@@ -1,9 +1,6 @@
 import Tone from "tone";
 
 function sound() {
-  //create a synth and connect it to the master output (your speakers)
-  // new Tone.FatOscillator("Ab3", "sine", "square")
-  // var fmOsc = new Tone.FatOscillator("Ab3", "sine", "square").toMaster().start();
   window.synths = [0, 1].map(() =>
     new Tone.PolySynth(6, Tone.Synth, {
       oscillator: {
@@ -13,19 +10,20 @@ function sound() {
   );
 
   window.synths.map(s => {
-    s.set("frequency", 0);
-    s.set("volume", 50);
+    s.set("volume", 25);
     s.triggerAttack("C4");
+    s.set("frequency", 0);
   });
-  //   window.synths.map(s => (s.volume.value = 0));
+}
+let blooper = new Tone.PolySynth(6, Tone.Synth, {
+  oscillator: {
+    partials: [0, 2, 3, 4]
+  }
+}).toMaster();
 
-  // window.synths.map(s => (s.oscillator.frequency.value = 0));
-  // var synth = ;
-
-  // window.synths = [0, 1].map(() =>
-  // new Tone.FatOscillator("Ab3", "sine", "square").toMaster().start()
-  // );
-  // new Tone.FatOscillator("Ab3", "sine", "square").toMaster().start();
+function bloop(n) {
+  blooper.triggerAttackRelease("C4", 0.1);
+  blooper.set("frequency", (5 - n) * 100);
 }
 
-export { sound };
+export { sound, bloop };

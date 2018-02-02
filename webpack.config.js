@@ -16,7 +16,7 @@ let config = {
   devServer: {
     overlay: true
   },
-  plugins: [new UglifyJSPlugin({ uglifyOptions: {} })],
+  plugins: [new UglifyJSPlugin()],
   module: {
     loaders: [
       {

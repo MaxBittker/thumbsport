@@ -24,6 +24,7 @@
     "babel-plugin-glslify": "^2.0.0",
     "babel-preset-latest": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "computer-sleep": "^0.0.1",
     "getusermedia": "^2.0.1",
     "gl": "^4.0.4",
     "gl-now": "^1.4.0",
