@@ -41,7 +41,7 @@
     "glsl-specular-gaussian": "^1.0.0",
     "glsl-square-frame": "^1.0.1",
     "glsl-turntable-camera": "^1.0.0",
-    "glsl-voronoi-noise": "^0.0.1",
+    "glsl-voronoi-noise": "^1.1.0",
     "glslify": "^6.1.0",
     "grapesjs": "^0.12.45",
     "html5-gamepad": "^1.1.0",
