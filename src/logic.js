@@ -122,13 +122,10 @@ function updateArena({ dots, AI, health }, movements, side) {
 
   if (d < 0.4) {
     health -= (0.4 - d) * 0.04;
-    // window.synths[side].oscillator.frequency.value = (0.4 - d) * 400;
-    // window.synths[side].volume.value = 0.4 - d;
     window.synths[side].set("detune", d * -1000);
-    window.synths[side].set("frequency", (0.4 - d) * 240);
+    window.synths[side].set("frequency", 20 + 100 * side + (0.4 - d) * 440);
   } else {
     health += 0.0005;
-    // window.synths[side].oscillator.frequency.value = 0;
     window.synths[side].set("frequency", 0);
   }
 
@@ -162,7 +159,7 @@ function update(inputs) {
   if (inputs.length === 1) {
     arenas = arenas.map((arena, i) => runAI(arena, i));
     arenas = arenas.map((arena, i) =>
-      updateArena(arena, [inputs[0][i], arena.AI])
+      updateArena(arena, [inputs[0][i], arena.AI], 0)
     );
   } else {
     arenas = arenas.map((arena, i) =>

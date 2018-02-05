@@ -2488,9 +2488,13 @@ glsl-turntable-camera@^1.0.0:
     glsl-camera-ray "^1.0.0"
     glsl-square-frame "^1.0.1"
 
-glsl-voronoi-noise@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/glsl-voronoi-noise/-/glsl-voronoi-noise-1.1.0.tgz#e70638a2cac26ed213c6f42324b464c900a05588"
+glsl-voronoi-noise@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/glsl-voronoi-noise/-/glsl-voronoi-noise-1.2.1.tgz#ff883c5bfda0966aaff9ddabc3b389e8418503c7"
+
+glsl-worley@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/glsl-worley/-/glsl-worley-1.0.2.tgz#27d61fdc98b9425c6c524c435f4f554bc2186bac"
 
 glslify-bundle@^2.0.4:
   version "2.0.4"

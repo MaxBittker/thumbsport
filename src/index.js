@@ -10,7 +10,7 @@ import { sound } from "./sound";
 
 sound();
 input();
-window.pixelRatio = 0.6;
+window.pixelRatio = 0.9;
 
 let canvases = [document.getElementById("l"), document.getElementById("r")];
 
