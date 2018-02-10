@@ -11,11 +11,13 @@ function showScore([left, right]) {
 function showCountDown(n, start) {
   if (n === -1) {
     bloop(-3);
-    start();
     countdown.textContent = "";
   } else {
     bloop(3);
     countdown.textContent = n;
+    if (n === 0) {
+      start();
+    }
     window.setTimeout(() => showCountDown(n - 1, start), 1000);
   }
 }

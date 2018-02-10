@@ -17,27 +17,13 @@ float PI = 3.14159;
 // clang-format off
 #pragma glslify: smin = require('glsl-smooth-min')
 #pragma glslify: hsv2rgb = require('glsl-hsv2rgb')
-
-// #pragma glslify: raytrace = require('glsl-raytrace', map = doModel, steps = 90)
-// #pragma glslify: normal = require('glsl-sdf-normal', map = doModel)
-// #pragma glslify: orenn = require('glsl-diffuse-oren-nayar')
-// #pragma glslify: gauss = require('glsl-specular-gaussian')
 #pragma glslify: camera = require('glsl-turntable-camera')
-
-// #pragma glslify: fbm4d = require('glsl-fractal-brownian-noise/4d')
-// #pragma glslify: fbm3d = require('glsl-fractal-brownian-noise/3d')
-#pragma glslify: voronoi3d = require('glsl-voronoi-noise/3d')
-// #pragma glslify: voronoi2d = require('glsl-voronoi-noise/2d')
-
-
-// #pragma glslify: noise3d = require('glsl-noise/simplex/3d')
-// #pragma glslify: noise2d = require('glsl-noise/simplex/2d')
-// #pragma glslify: noise4d = require('glsl-noise/simplex/4d')
-
 #pragma glslify: squareFrame = require('glsl-square-frame')
-// #pragma glslify: noise4d = require(glsl-noise/simplex/4d)
+#pragma glslify: worley3D = require(glsl-worley/worley3D.glsl)
 // clang-format on
+
 // vec2 rd = vec2(atan(teamOrg.y, teamOrg.x), length(teamOrg) * 20.);
+
 void main() {
   vec2 st = squareFrame(resolution);
   vec2 pix = 1. / resolution;
@@ -52,8 +38,8 @@ void main() {
     bool attacker = (i == 0 && side) || (!side && i == 1);
     float b = length(st - orbs[i].xy) - (attacker ? 0.1 : 0.09);
     float fi = float(i);
-    b +=
-        (voronoi3d(vec3(st * 10., t)).x - 0.5) * 0.08 * (attacker ? -1.0 : 1.0);
+    b += (worley3D(vec3(st * 10., t), 0.4, false).x - 0.5) * 0.08 *
+         (attacker ? -1.0 : 1.0);
     player = (d > b) ? i : player;
 
     teamOrg = (d > b) ? orbs[i].xy - st : teamOrg;
@@ -79,7 +65,7 @@ void main() {
                ? hsv2rgb(vec3(0.1, 0.1, 0.4))
                : vcolor;
 
-  float vtext = voronoi3d(vec3(st * 20. - vec2(-t * 2.0, d), t)).x;
+  float vtext = worley3D(vec3(st * 20. - vec2(-t * 2.0, d), t), 0.8, false).x;
   float hp = health * 0.8;
   float tk = side ? 0.03 : 0.6;
 

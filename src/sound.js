@@ -10,11 +10,12 @@ function sound() {
   );
 
   window.synths.map(s => {
-    s.set("volume", 50);
+    s.set("volume", 5);
     s.triggerAttack("C4");
     s.set("frequency", 0);
   });
 }
+
 let blooper = new Tone.PolySynth(6, Tone.Synth, {
   oscillator: {
     partials: [0, 2, 3, 4]
@@ -22,8 +23,9 @@ let blooper = new Tone.PolySynth(6, Tone.Synth, {
 }).toMaster();
 
 function bloop(n) {
-  blooper.triggerAttackRelease("C4", 0.1);
+  blooper.triggerAttackRelease("A4", 0.1);
   blooper.set("frequency", (5 - n) * 100);
+  blooper.set("volume", 0.1);
 }
 
 export { sound, bloop };
