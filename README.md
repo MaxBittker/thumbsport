@@ -1,7 +1,7 @@
 # Thumbsport
 
 ##[Play Now](https://maxbittker.github.io/thumbsport/)
-A local multiplayer competitive joystick game, built with WebGL and JS.
+A local multiplayer competitive joystick game, built with WebGL and JS. (Also, a laser socks demake)
 ![screenshot](https://i.imgur.com/lXWrYHe.png)
 
 ##Instructions:
