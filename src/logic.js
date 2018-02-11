@@ -1,4 +1,4 @@
-import { bloop } from "./sound";
+import { bloop, setRate } from "./sound";
 
 import { showScore, showCountDown, showWinner } from "./display";
 
@@ -59,12 +59,12 @@ let norm = a => scale(a, 1 / (mag(a) || 0.001));
 
 // console.log(sub({ x: 1, y: 1 }, { x: 5, y: 1 }));
 
-let speed = 3 / 100;
+let speed = 2;
 
 function updateDot({ x, y }, { x: dx, y: dy }) {
   return {
-    x: clamp(x + friction(dx) * speed, bound),
-    y: clamp(y + friction(dy) * -speed, bound)
+    x: clamp(x + friction(dx) * speed / 100, bound),
+    y: clamp(y + friction(dy) * -speed / 100, bound)
   };
 }
 
@@ -115,17 +115,18 @@ let runAI = ({ dots, AI, health, d }, side) => {
     d
   };
 };
+
 function updateArena({ dots, AI, health }, movements, side) {
   dots = dots.map((dot, i) => updateDot(dot, movements[i]));
 
   let d = distance(...dots);
 
   if (d < 0.4) {
-    health -= (0.4 - d) * 0.04;
+    health -= (0.4 - d) * 0.02 * Math.min(3, speed);
     window.synths[side].set("detune", d * -1000);
     window.synths[side].set("frequency", 20 + 100 * side + (0.4 - d) * 440);
   } else {
-    health += 0.0005;
+    health += 0.00025 * Math.min(3, speed);
     window.synths[side].set("frequency", 0);
   }
 
@@ -139,10 +140,15 @@ function updateArena({ dots, AI, health }, movements, side) {
   };
 }
 
+function setSpeed(n) {
+  speed = n;
+  console.log(n, n * 0.4);
+  setRate(0.2 + n * 0.3);
+}
+
 function checkWin({ health }, i) {
   if (health <= -1) {
     mode = "stop";
-    // alert(`Player ${i} Wins!`);
     score[i]++;
     showScore(score);
     showWinner(i);
@@ -155,7 +161,9 @@ function update(inputs) {
   if (mode !== "play") {
     return;
   }
-
+  if (Math.random() > 0.999) {
+    setSpeed(0.15 + 8 * Math.random() * Math.random());
+  }
   if (inputs.length === 1) {
     arenas = arenas.map((arena, i) => runAI(arena, i));
     arenas = arenas.map((arena, i) =>
@@ -182,6 +190,9 @@ let go = () => {
   resetArenas();
   showCountDown(3, () => {
     mode = "play";
+    setSpeed(2);
   });
 };
-export { getArenaState, update, go };
+let getSpeed = () => speed;
+
+export { getArenaState, update, go, getSpeed };

@@ -1,7 +1,7 @@
 import reglFactory from "regl";
 import fsh from "./fragment.glsl";
 import vsh from "./vertex.glsl";
-
+import { getSpeed } from "./logic";
 function renderArena(canvas, gameState, side) {
   let { width, height } = canvas.getBoundingClientRect();
 
@@ -29,7 +29,7 @@ function renderArena(canvas, gameState, side) {
       framebufferHeight
     ],
     side,
-    t: ({ tick }) => 0.01 * tick,
+    t: ({ tick }) => 0.005 * tick * getSpeed(),
     health: () => gameState().health,
     fightDistance: () => gameState().d,
 
