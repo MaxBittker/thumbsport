@@ -1,4 +1,5 @@
 import Tone from "tone";
+let player;
 
 function sound() {
   window.synths = [0, 1].map(() =>
@@ -14,6 +15,8 @@ function sound() {
     s.triggerAttack("C4");
     s.set("frequency", 0);
   });
+
+  music();
 }
 
 let blooper = new Tone.PolySynth(6, Tone.Synth, {
@@ -28,4 +31,17 @@ function bloop(n) {
   blooper.set("volume", 0.1);
 }
 
-export { sound, bloop };
+function music() {
+  player = new Tone.Player({
+    url: "./resources/birds-lament.ogg",
+    loop: true
+  }).toMaster();
+  player.autostart = true;
+  player.volume.value = -18;
+}
+
+function setRate(rate) {
+  player.playbackRate = rate;
+}
+
+export { sound, bloop, setRate };
