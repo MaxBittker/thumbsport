@@ -17,7 +17,6 @@ float PI = 3.14159;
 // clang-format off
 #pragma glslify: smin = require('glsl-smooth-min')
 #pragma glslify: hsv2rgb = require('glsl-hsv2rgb')
-#pragma glslify: camera = require('glsl-turntable-camera')
 #pragma glslify: squareFrame = require('glsl-square-frame')
 #pragma glslify: worley3D = require(glsl-worley/worley3D.glsl)
 // clang-format on
@@ -41,7 +40,6 @@ void main() {
     b += (worley3D(vec3(st * 10., t), 0.4, false).x - 0.5) * 0.08 *
          (attacker ? -1.0 : 1.0);
     player = (d > b) ? i : player;
-
     teamOrg = (d > b) ? orbs[i].xy - st : teamOrg;
     vec2 rd = vec2(atan(teamOrg.y, teamOrg.x), length(teamOrg) * 20.);
 
@@ -56,6 +54,7 @@ void main() {
   float thrsh = 1. / 200.;
   float hue = (player == 1) ? 0.03 : .6;
   float saturation = 0.7;
+
   float value = d < (thrsh - (pix.x * 2.)) ? 0.7 : 0.;
 
   color = (d > thrsh) ? bg : hsv2rgb(vec3(hue, saturation, value));

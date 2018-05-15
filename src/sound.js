@@ -36,7 +36,7 @@ function music() {
     url: "./resources/birds-lament.ogg",
     loop: true
   }).toMaster();
-  player.autostart = true;
+  // player.autostart = true;
   player.volume.value = -18;
 }
 

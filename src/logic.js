@@ -161,8 +161,8 @@ function update(inputs) {
   if (mode !== "play") {
     return;
   }
-  if (Math.random() > 0.999) {
-    setSpeed(0.15 + 8 * Math.random() * Math.random());
+  if (Math.random() > 0.993) {
+    setSpeed(0.15 + 8 * Math.pow(Math.random(), 1.2));
   }
   if (inputs.length === 1) {
     arenas = arenas.map((arena, i) => runAI(arena, i));
